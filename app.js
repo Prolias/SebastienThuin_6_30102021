@@ -20,6 +20,6 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
-app.use('/api/sauce', sauceRoutes);
+app.use('/api/sauces', sauceRoutes);
 
 module.exports = app;
