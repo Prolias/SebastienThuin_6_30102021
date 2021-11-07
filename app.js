@@ -11,6 +11,14 @@ mongoose.connect(`mongodb+srv://admin:${process.env.MONGO_PASSWORD}@cluster0.nr0
 .then(() => console.log('Connexion à MongoDB réussie !'))
 .catch(err => console.error(err));
 
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    next();
+});
+app.use(express.json());
+
 app.use('/api/auth', authRoutes);
 app.use('/api/sauce', sauceRoutes);
 
