@@ -47,28 +47,25 @@ exports.deleteSauce = (req, res) => {
 
 exports.likeSauce = async (req, res) => {
     try {
-        const sauce = await Sauce.findOne({ _id: req.params.id })
-        const liked = sauce.usersLiked.findIndex(str => str === req.body.userId)
-        const disliked = sauce.usersDisliked.findIndex(str => str === req.body.userId)
         let message = '';
-        if(liked != -1){
-            sauce.likes -= 1;
-            sauce.usersLiked.splice(liked, 1);
-        }
-        else if(disliked != -1) {
-            sauce.dislikes -= 1;
-            sauce.usersDisliked.splice(liked, 1);
-        }
-        if(req.body.like == 1){
-            sauce.likes += 1;
-            sauce.usersLiked.push(req.body.userId);
-            message = 'Liked!'
-        }
-        else if(req.body.like == -1) {
-            sauce.dislikes += 1;
-            sauce.usersDisliked.push(req.body.userId);
-            message = 'Disliked!'
-            console.log(sauce.usersDisliked);
+        const sauce = await Sauce.findOne({ _id: req.params.id })
+        removeDisLike(sauce, req);
+        switch(req.body.like) {
+            case 1:
+                sauce.likes += 1;
+                sauce.usersLiked.push(req.body.userId);
+                message = 'Liked!'
+            break;
+            case -1:
+                sauce.dislikes += 1;
+                sauce.usersDisliked.push(req.body.userId);
+                message = 'Disliked!'
+            break;
+            case 0:
+                message = 'Removed Like/Dislike!'
+            break;
+            default:
+            throw new Error('Invalid body request')
         }
         await sauce.save();
         res.status(200).json({ message });
@@ -76,4 +73,25 @@ exports.likeSauce = async (req, res) => {
     catch (error) {
         res.status(400).json({ error });
     }
+}
+
+const removeDisLike = (sauce, req) => {
+    const liked = sauce.usersLiked.findIndex(str => str === req.body.userId)
+    const disliked = sauce.usersDisliked.findIndex(str => str === req.body.userId)
+
+    const removeL = () => {
+        sauce.likes -= 1;
+        sauce.usersLiked.splice(liked, 1);
+    }
+    const removeD = () => {
+        sauce.dislikes -= 1;
+        sauce.usersDisliked.splice(liked, 1);
+    }
+    
+    if(liked == 1 && disliked == 1) {
+        removeL
+        removeD
+    }
+    if(liked == 1 && disliked == -1) removeL
+    if(liked == -1 && disliked == 1) removeD
 }
