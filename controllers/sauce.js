@@ -71,14 +71,13 @@ exports.likeSauce = async (req, res) => {
         res.status(200).json({ message });
     }
     catch (error) {
-        res.status(400).json({ error });
+        res.status(400).json({ error: error.message });
     }
 }
 
 const removeDisLike = (sauce, req) => {
     const liked = sauce.usersLiked.findIndex(str => str === req.body.userId)
     const disliked = sauce.usersDisliked.findIndex(str => str === req.body.userId)
-
     const removeL = () => {
         sauce.likes -= 1;
         sauce.usersLiked.splice(liked, 1);
@@ -87,11 +86,10 @@ const removeDisLike = (sauce, req) => {
         sauce.dislikes -= 1;
         sauce.usersDisliked.splice(liked, 1);
     }
-    
-    if(liked == 1 && disliked == 1) {
-        removeL
-        removeD
+    if(liked != -1 && disliked != -1) {
+        removeL()
+        removeD()
     }
-    if(liked == 1 && disliked == -1) removeL
-    if(liked == -1 && disliked == 1) removeD
+    if(liked != -1 && disliked == -1) removeL()
+    if(liked == -1 && disliked != -1)  removeD()
 }
