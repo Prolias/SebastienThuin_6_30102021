@@ -1,0 +1,441 @@
+{
+    "openapi":"3.0.2",
+    "info": {
+        "title": "Hot Takes API",
+        "description": "Hot Takes API information",
+        "version":"1.0"
+    },
+    "servers": [
+        {"url":"http://localhost:3000/"}
+    ],
+    "components": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        },
+        "schemas": {
+            "User": {
+                "type": "object",
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "email": "example@example.com",
+                    "password": "password"
+                }
+            },
+            "Sauce": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string"
+                    },
+                    "userId": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "manufacturer": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "mainPepper": {
+                        "type": "string"
+                    },
+                    "imageUrl": {
+                        "type": "string"
+                    },
+                    "heat": {
+                        "type": "integer"
+                    },
+                    "likes": {
+                        "type": "integer"
+                    },
+                    "dislikes": {
+                        "type": "integer"
+                    },
+                    "usersLikes": {
+                        "type": "array",
+                        "properties": {
+                            "userId": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "usersDislikes": {
+                        "type": "array",
+                        "properties": {
+                            "userId": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "ReponseMessage": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "The auth routes for the app"
+        },
+        {
+            "name": "Sauces",
+            "description": "The sauces routes for the app"
+        }
+    ],
+    "paths": {
+        "/api/auth/signup": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "description": "User signup to the application",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User created!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReponseMessage"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Argument missing or error while saving data"
+                    },
+                    "5XX": {
+                        "description": "Unexpected error"
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "description": "User login to the application",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User logged with success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "userId": {
+                                            "type": "string"
+                                        },
+                                        "token": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "User not found or password incorrect"
+                    },
+                    "5XX": {
+                        "description": "Unexpected error"
+                    }
+                }
+            }
+        },
+        "/api/sauces/": {
+            "get": {
+                "tags": [
+                    "Sauces"
+                ],
+                "description": "Get all sauce from the database",
+                "responses": {
+                    "200": {
+                        "description": "A list of sauce"
+                    },
+                    "400": {
+                        "description": "Error while retreving sauces"
+                    },
+                    "401": {
+                        "description": "Unauthorized user"
+                    },
+                    "5XX": {
+                        "description": "Unexpected error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Sauces"
+                ],
+                "description": "Create a new sauce to the database",
+                "responses": {
+                    "201": {
+                        "description": "New sauce created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReponseMessage"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error while creating sauces"
+                    },
+                    "401": {
+                        "description": "Unauthorized user"
+                    },
+                    "5XX": {
+                        "description": "Unexpected error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/sauces/{id}": {
+            "get": {
+                "tags": [
+                    "Sauces"
+                ],
+                "description": "Get one sauce from the database",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],             
+                "responses": {
+                    "200": {
+                        "description": "Access to the sauce",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Sauce"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error while retreving sauces"
+                    },
+                    "401": {
+                        "description": "Unauthorized user"
+                    },
+                    "5XX": {
+                        "description": "Unexpected error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Sauces"
+                ],
+                "description": "Modify the sauce {id} into the database",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Sauce"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sauce modified",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReponseMessage"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized user"
+                    },
+                    "5XX": {
+                        "description": "Unexpected error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Sauces"
+                ],
+                "description": "Delete the sauce {id} into the database",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sauce deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReponseMessage"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized user"
+                    },
+                    "5XX": {
+                        "description": "Unexpected error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/sauces/{id}/like": {
+            "post": {
+                "tags": [
+                    "Sauces"
+                ],
+                "description": "Like the sauce {id} for the user {userId} into the database",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "userId": {
+                                        "type": "string"
+                                    },
+                                    "like": {
+                                        "type": "number"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Liked the sauce",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReponseMessage"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized user"
+                    },
+                    "5XX": {
+                        "description": "Unexpected error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        }
+    }
+}

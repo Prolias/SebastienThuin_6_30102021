@@ -4,13 +4,13 @@ const fs = require('fs');
 exports.getAllSauces = (req, res) => {
     Sauce.find()
     .then(sauces => res.status(200).json(sauces))
-    .catch(error => res.status(400).json({ error }));
+    .catch(error => res.status(400).json({ error: error.message }));
 }
 
 exports.getOneSauce = (req, res) => {
     Sauce.findById({_id: req.params.id})
     .then(sauce => res.status(200).json(sauce))
-    .catch(error => res.status(404).json({ error }));
+    .catch(error => res.status(400).json({ error: error.message }));
 }
 
 exports.createSauce = (req, res) => {
@@ -23,13 +23,13 @@ exports.createSauce = (req, res) => {
     });
     sauce.save()
     .then(() => res.status(201).json({ 'message': 'Sauce created!' }))
-    .catch(error => res.status(400).json({ error }))
+    .catch(error => res.status(400).json({ error: error.message }))
 }
 
 exports.modifySauce = (req, res) => {
     Sauce.updateOne({ _id: req.params.id }, { ...req.body, _id: req.params.id})
     .then(() => res.status(200).json({ 'message': 'Sauce modified!' }))
-    .catch(error => res.status(400).json({ error }))
+    .catch(error => res.status(400).json({ error: error.message }))
 }
 
 exports.deleteSauce = (req, res) => {
@@ -39,10 +39,10 @@ exports.deleteSauce = (req, res) => {
         fs.unlink(`images/${filename}`, () => {
             Sauce.deleteOne({_id: req.params.id})
             .then(() => res.status(200).json({ message: 'Sauce deleted!'}))
-            .catch(error => res.status(400).json({ error }));
+            .catch(error => res.status(400).json({ error: error.message }));
         })
     })
-    .catch(error => res.status(500).json({ error }))
+    .catch(error => res.status(500).json({ error: error.message }))
 }
 
 exports.likeSauce = async (req, res) => {
