@@ -22,7 +22,7 @@ app.use((req, res, next) => {
     next();
 });
 app.use(express.json());
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use('/images', express.static(path.join(__dirname, 'images')))
 
