@@ -9,29 +9,9 @@ Backend for the application hot takes which is a project for the OpenClassrooms 
 To run this project, you will need to add the following environment variables to your .env file
 
 `MONGO_PASSWORD`
+`TOKEN_ENCRYPT`
 
 
 ## API Reference
 
-#### Signup to the panel
-
-```http
-  POST /api/auth/signup
-```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `email` | `string` | **Required**. Your email |
-| `password` | `string` | **Required**. Your password |
-
-#### Login to the panel
-
-```http
-  POST /api/auth/login
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `email`      | `string` | **Required**. Your email |
-| `password`      | `string` | **Required**. Your password |
-
+Launch the app then go to `http://localhost:3000/api/docs`

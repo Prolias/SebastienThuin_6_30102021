@@ -8,6 +8,7 @@ specifiers:
   mongoose: ^6.0.12
   mongoose-unique-validator: ^3.0.0
   multer: ^1.4.3
+  swagger-ui-express: ^4.1.6
 
 dependencies:
   bcrypt: 5.0.1
@@ -17,6 +18,7 @@ dependencies:
   mongoose: 6.0.12
   mongoose-unique-validator: 3.0.0_mongoose@6.0.12
   multer: 1.4.3
+  swagger-ui-express: 4.1.6_express@4.17.1
 
 packages:
 
@@ -1012,6 +1014,20 @@ packages:
     engines: {node: '>=4'}
     dependencies:
       ansi-regex: 3.0.0
+    dev: false
+
+  /swagger-ui-dist/3.52.5:
+    resolution: {integrity: sha512-8z18eX8G/jbTXYzyNIaobrnD7PSN7yU/YkSasMmajrXtw0FGS64XjrKn5v37d36qmU3o1xLeuYnktshRr7uIFw==}
+    dev: false
+
+  /swagger-ui-express/4.1.6_express@4.17.1:
+    resolution: {integrity: sha512-Xs2BGGudvDBtL7RXcYtNvHsFtP1DBFPMJFRxHe5ez/VG/rzVOEjazJOOSc/kSCyxreCTKfJrII6MJlL9a6t8vw==}
+    engines: {node: '>= v0.10.32'}
+    peerDependencies:
+      express: '>=4.0.0'
+    dependencies:
+      express: 4.17.1
+      swagger-ui-dist: 3.52.5
     dev: false
 
   /tar/6.1.11:
